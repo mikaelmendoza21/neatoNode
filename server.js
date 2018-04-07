@@ -1,10 +1,11 @@
 const http = require('http');
 const url = require('url');
 const fs = require('fs');
-const path = require('path');
+const pathReader = require('path');
 var mimeTypes = require('./fileSettings');
 
 const port = process.argv[2] || 9000;
+const rootFileDirectory = "./files"
 
 http.createServer(function (req, res) {
 	if(req.method == 'GET'){
@@ -13,31 +14,46 @@ http.createServer(function (req, res) {
 		// parse URL
 		const parsedUrl = url.parse(req.url);
 		
-		// extract URL path
-		var pathname = `.${parsedUrl.pathname}`;
-		console.log(`Requested ${pathname}`);
+		// Get path from URL
+		var path = `.${parsedUrl.pathname}`;
+		console.log(`Requested ${path}`);
 		
-		fs.exists(pathname, (exists) => {
+		fs.exists(path, (exists) => {
 		    if(!exists) {
-		      // if the file is not found, return 404
+		      // Invalid path
 		      res.statusCode = 404;
-		      res.end(`File ${pathname} not found!`);
+		      res.end(`File ${path} not found!`);
 		      return;
-		    }
-		    // if is a directory, then look for index.html
-		    if (fs.statSync(pathname).isDirectory()) {
-		      pathname += '/index.html';
-		    }
+				}
+				
+		    // Path is Directory, return file list
+		    if (fs.statSync(path).isDirectory()){
+					if (fs.statSync(path).isDirectory()){
+						fs.readdir(path, function(err, items) {
+							var fileList = `Files in directory '${path}' : \n`;
+							items.forEach(element => {
+								fileList += element + "\n";
+							});
+
+							res.end(fileList);
+						});
+					}
+					else {
+						// Not allowed to view directory
+						res.statusCode = 404;
+						res.end(`${path} is not a valid Directory`);
+					}
+				}
 		    
 		    // Read from filesystem
-		    fs.readFile(pathname, function(err, data){
+		    fs.readFile(path, function(err, data){
 		      if(err){
 		        res.statusCode = 500;
 		        res.end(`Error getting the file: ${err}.`);
 		      } 
 		      else {
 		        // based on the URL path, extract the file extention. e.g. .js, .doc, ...
-		        const ext = path.parse(pathname).ext;
+		        const ext = pathReader.parse(path).ext;
 		        // if the file is found, set Content-type and send data
 		        res.setHeader('Content-type', mimeTypes[ext] || 'text/plain' );
 		        res.end(data);

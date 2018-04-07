@@ -1,6 +1,6 @@
 # neatoNode
-A personal server build for Node.js
+A personal server build with Node.js
 
-##Includes:
+Includes:
 - File server
 
