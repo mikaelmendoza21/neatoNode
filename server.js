@@ -28,7 +28,7 @@ http.createServer(function (req, res) {
 				
 		    // Path is Directory, return file list
 		    if (fs.statSync(path).isDirectory()){
-					if (fs.statSync(path).isDirectory()){
+					if (path.indexOf(rootFileDirectory) == 0){
 						fs.readdir(path, function(err, items) {
 							var fileList = `Files in directory '${path}' : \n`;
 							items.forEach(element => {
