@@ -1,0 +1,23 @@
+{
+  "name": "neato-server",
+  "version": "1.0.0",
+  "description": "Personal light-weight node server",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mikaelmendoza21/neatoNode.git"
+  },
+  "author": "Mikael A. Mendoza",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mikaelmendoza21/neatoNode/issues"
+  },
+  "homepage": "https://github.com/mikaelmendoza21/neatoNode#readme",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}
